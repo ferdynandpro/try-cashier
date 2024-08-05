@@ -13,7 +13,23 @@ const port = process.env.PORT || 5000;
 const mongoUri = process.env.MONGODB_URI;
 const secretKey = process.env.SECRET_KEY;
 
-app.use(cors());
+const allowedOrigins = ['https://cashier-web-five.vercel.app'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // jika Anda memerlukan credentials seperti cookie
+  optionsSuccessStatus: 204 // beberapa browser lama (seperti IE11) menggunakan kode status ini
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 let usersCollection;
