@@ -34,13 +34,18 @@ app.use(express.json());
 
 let usersCollection;
 
-MongoClient.connect(mongoUri)
-  .then(client => {
+async function connectToDatabase() {
+  try {
+    const client = await MongoClient.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('Connected to Database');
-    const db = client.db('ProductInventoery');
+    const db = client.db('ProductInventory');
     usersCollection = db.collection('users');
-  })
-  .catch(error => console.error('Failed to connect to the database:', error));
+  } catch (error) {
+    console.error('Failed to connect to the database:', error);
+  }
+}
+
+connectToDatabase();
 
 app.post('/login', async (req, res) => {
   try {
