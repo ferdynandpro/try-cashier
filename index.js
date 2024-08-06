@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 const mongoUri = process.env.MONGODB_URI;
-const secretKey = process.env.SECRET_KEY;
+// const secretKey = process.env.SECRET_KEY;
 
 const allowedOrigins = ['https://cashier-web-five.vercel.app'];
 
@@ -61,7 +61,7 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    const token = jwt.sign({ userId: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, username: user.username }, { expiresIn: '1h' });
 
     res.status(200).json({ message: 'Login successful', token });
   } catch (error) {
